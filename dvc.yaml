@@ -1,0 +1,9 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py --input_path C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt --output_path data/processed/df_scaled.csv
+    deps:
+      - src/prepare.py
+      - C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt
+      - C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
+    outs:
+      - data/processed/df_scaled.csv
