@@ -7,3 +7,11 @@ stages:
       - C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
     outs:
       - data/processed/df_scaled.csv
+  reduce:
+    cmd: python src/reduce.py --input_path data/processed/df_scaled.csv --output_path data/reduced/df_reduced.csv --params_path reduce_params.yaml
+    deps:
+      - src/reduce.py
+      - data/processed/df_scaled.csv
+      - reduce_params.yaml
+    outs:
+      - data/reduced/df_reduced.csv

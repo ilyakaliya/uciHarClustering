@@ -1,0 +1,44 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py --input_path C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt
+      --output_path data/processed/df_scaled.csv
+    deps:
+    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt
+      hash: md5
+      md5: 8fac6d9d9463c7a7e3620fc9c5b85e46
+      size: 66006256
+    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
+      hash: md5
+      md5: 03cde39e4f847aea23d3b106428b67d5
+      size: 14704
+    - path: src/prepare.py
+      hash: md5
+      md5: 1bc856da37623747ecb6f1cf1a3ec80b
+      size: 1307
+    outs:
+    - path: data/processed/df_scaled.csv
+      hash: md5
+      md5: 9d72c7718d6615887e4f98146f49c480
+      size: 81135877
+  reduce:
+    cmd: python src/reduce.py --input_path data/processed/df_scaled.csv --output_path
+      data/reduced/df_reduced.csv --params_path reduce_params.yaml
+    deps:
+    - path: data/processed/df_scaled.csv
+      hash: md5
+      md5: 9d72c7718d6615887e4f98146f49c480
+      size: 81135877
+    - path: reduce_params.yaml
+      hash: md5
+      md5: 604fa01d87ef8163397b6605c020f5ad
+      size: 315
+    - path: src/reduce.py
+      hash: md5
+      md5: 82d275277f1ef2c90eda01526daf0bd5
+      size: 3196
+    outs:
+    - path: data/reduced/df_reduced.csv
+      hash: md5
+      md5: f83b7b4f2a48bdad3f7f7206069af13c
+      size: 157672

@@ -1,0 +1,15 @@
+method: UMAP  # Choose between "PCA", "tSNE", "UMAP"
+n_components: 2  # Number of dimensions to reduce to
+
+# Parameters for UMAP
+n_neighbors: 15
+min_dist: 0.1
+random_state: 42
+
+# Parameters for t-SNE
+perplexity: 30
+learning_rate: 200
+n_iter: 1000
+
+# Parameters for PCA
+# n_components is reused for PCA
