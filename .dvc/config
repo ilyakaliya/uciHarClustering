@@ -1,0 +1,4 @@
+[core]
+    remote = workremote
+['remote "workremote"']
+    url = ../dvc_storage
