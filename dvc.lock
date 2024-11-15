@@ -42,3 +42,54 @@ stages:
       hash: md5
       md5: f83b7b4f2a48bdad3f7f7206069af13c
       size: 157672
+  cluster:
+    cmd: python src/cluster.py --input_path data/reduced/df_reduced.csv --output_path
+      data/clustered/df_clustered.csv --params_path cluster_params.yaml
+    deps:
+    - path: cluster_params.yaml
+      hash: md5
+      md5: bec498b1de3e0cb195cf079dcfe3345b
+      size: 99
+    - path: data/reduced/df_reduced.csv
+      hash: md5
+      md5: f83b7b4f2a48bdad3f7f7206069af13c
+      size: 157672
+    - path: src/cluster.py
+      hash: md5
+      md5: 033c35ba4b10ec3f934a45dcb5902bcb
+      size: 3366
+    outs:
+    - path: data/clustered/df_clustered.csv
+      hash: md5
+      md5: a9067d0d57b312f3b91628ca2ac52486
+      size: 172384
+    - path: data/clustered/df_clustered_clusters.png
+      hash: md5
+      md5: 9a544be1031ed70b288cd89ea4525bf2
+      size: 141475
+  evaluate:
+    cmd: python src/evaluate.py --input_path data/reduced/df_reduced.csv --true_labels_path
+      C:/11_kaliya_ml/UCI_HAR_Dataset/UCI_HAR_Dataset/train/y_train.txt --params_path
+      evaluate_params.yaml --metrics_output_path metrics.json
+    deps:
+    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
+      hash: md5
+      md5: 03cde39e4f847aea23d3b106428b67d5
+      size: 14704
+    - path: data/reduced/df_reduced.csv
+      hash: md5
+      md5: f83b7b4f2a48bdad3f7f7206069af13c
+      size: 157672
+    - path: evaluate_params.yaml
+      hash: md5
+      md5: b917814d458ebee148815934c97c6b70
+      size: 108
+    - path: src/evaluate.py
+      hash: md5
+      md5: 0c735cc7b4a3f025e22f7b00a27f3d72
+      size: 3330
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 64eb3e68998d135b873045fad0d8d70e
+      size: 185

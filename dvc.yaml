@@ -15,3 +15,21 @@ stages:
       - reduce_params.yaml
     outs:
       - data/reduced/df_reduced.csv
+  cluster:
+    cmd: python src/cluster.py --input_path data/reduced/df_reduced.csv --output_path data/clustered/df_clustered.csv --params_path cluster_params.yaml
+    deps:
+      - src/cluster.py
+      - data/reduced/df_reduced.csv
+      - cluster_params.yaml
+    outs:
+      - data/clustered/df_clustered.csv
+      - data/clustered/df_clustered_clusters.png
+  evaluate:
+    cmd: python src/evaluate.py --input_path data/reduced/df_reduced.csv --true_labels_path C:/11_kaliya_ml/UCI_HAR_Dataset/UCI_HAR_Dataset/train/y_train.txt --params_path evaluate_params.yaml --metrics_output_path metrics.json
+    deps:
+      - src/evaluate.py
+      - data/reduced/df_reduced.csv
+      - evaluate_params.yaml
+      - C:/11_kaliya_ml/UCI_HAR_Dataset/UCI_HAR_Dataset/train/y_train.txt
+    metrics:
+      - metrics.json

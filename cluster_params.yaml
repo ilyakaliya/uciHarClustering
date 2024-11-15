@@ -1,0 +1,2 @@
+n_clusters: 6  # Number of clusters for KMeans
+random_state: 42  # Random seed for reproducibility
