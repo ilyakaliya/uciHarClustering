@@ -1,95 +1,99 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: python src/prepare.py --input_path C:\11_kaliya_ml\UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt
+    cmd: python src/prepare.py --input_path /Users/ilyakaliya/Documents/11_kaliya_ml/uciHarClustering/data/raw/X_train.txt
       --output_path data/processed/df_scaled.csv
     deps:
-    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\X_train.txt
+    - path: data/raw/X_train.txt
       hash: md5
       md5: 8fac6d9d9463c7a7e3620fc9c5b85e46
       size: 66006256
-    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
+      isexec: true
+    - path: data/raw/y_train.txt
       hash: md5
       md5: 03cde39e4f847aea23d3b106428b67d5
       size: 14704
+      isexec: true
     - path: src/prepare.py
       hash: md5
-      md5: 1bc856da37623747ecb6f1cf1a3ec80b
-      size: 1307
+      md5: 458fc6b76615f58aacaa9b2a8eca3a9c
+      size: 1265
     outs:
     - path: data/processed/df_scaled.csv
       hash: md5
-      md5: 9d72c7718d6615887e4f98146f49c480
-      size: 81135877
+      md5: 118cc123a3fa1aa428d156c2fa0a4ff2
+      size: 81128524
   reduce:
     cmd: python src/reduce.py --input_path data/processed/df_scaled.csv --output_path
       data/reduced/df_reduced.csv --params_path reduce_params.yaml
     deps:
     - path: data/processed/df_scaled.csv
       hash: md5
-      md5: 9d72c7718d6615887e4f98146f49c480
-      size: 81135877
+      md5: 118cc123a3fa1aa428d156c2fa0a4ff2
+      size: 81128524
     - path: reduce_params.yaml
       hash: md5
-      md5: 604fa01d87ef8163397b6605c020f5ad
-      size: 315
+      md5: 0479408524317bb7e0666259d0c80c43
+      size: 323
     - path: src/reduce.py
       hash: md5
-      md5: 82d275277f1ef2c90eda01526daf0bd5
-      size: 3196
+      md5: 65d5f3f30e0562ef17075bba1654de08
+      size: 3181
     outs:
     - path: data/reduced/df_reduced.csv
       hash: md5
-      md5: f83b7b4f2a48bdad3f7f7206069af13c
-      size: 157672
+      md5: d69f9511c32b4dad11a40541bcca818f
+      size: 715758
   cluster:
     cmd: python src/cluster.py --input_path data/reduced/df_reduced.csv --output_path
-      data/clustered/df_clustered.csv --params_path cluster_params.yaml
+      data/clustered/df_clustered.csv --params_path cluster_params.yaml --true_labels_path
+      /Users/ilyakaliya/Documents/11_kaliya_ml/uciHarClustering/data/raw/y_train.txt
     deps:
     - path: cluster_params.yaml
       hash: md5
-      md5: bec498b1de3e0cb195cf079dcfe3345b
-      size: 99
+      md5: 98fb94c1eee7bb5934e6f3229442d482
+      size: 98
     - path: data/reduced/df_reduced.csv
       hash: md5
-      md5: f83b7b4f2a48bdad3f7f7206069af13c
-      size: 157672
+      md5: d69f9511c32b4dad11a40541bcca818f
+      size: 715758
     - path: src/cluster.py
       hash: md5
-      md5: 033c35ba4b10ec3f934a45dcb5902bcb
-      size: 3366
+      md5: 2700e0c6871ce9e9da8042eb2b3599fc
+      size: 4743
     outs:
     - path: data/clustered/df_clustered.csv
       hash: md5
-      md5: a9067d0d57b312f3b91628ca2ac52486
-      size: 172384
-    - path: data/clustered/df_clustered_clusters.png
+      md5: ab2bcbd1553a05e553d2c959061b9793
+      size: 730470
+    - path: data/clustered/df_clustered_clusters_vs_labels.png
       hash: md5
-      md5: 9a544be1031ed70b288cd89ea4525bf2
-      size: 141475
+      md5: c87fa8d3938b11e4d170264bb34356c9
+      size: 91589
   evaluate:
     cmd: python src/evaluate.py --input_path data/reduced/df_reduced.csv --true_labels_path
-      C:/11_kaliya_ml/UCI_HAR_Dataset/UCI_HAR_Dataset/train/y_train.txt --params_path
-      evaluate_params.yaml --metrics_output_path metrics.json
+      /Users/ilyakaliya/Documents/11_kaliya_ml/uciHarClustering/data/raw/y_train.txt
+      --params_path evaluate_params.yaml --metrics_output_path metrics.json
     deps:
-    - path: UCI_HAR_Dataset\UCI_HAR_Dataset\train\y_train.txt
+    - path: data/raw/y_train.txt
       hash: md5
       md5: 03cde39e4f847aea23d3b106428b67d5
       size: 14704
+      isexec: true
     - path: data/reduced/df_reduced.csv
       hash: md5
-      md5: f83b7b4f2a48bdad3f7f7206069af13c
-      size: 157672
+      md5: d69f9511c32b4dad11a40541bcca818f
+      size: 715758
     - path: evaluate_params.yaml
       hash: md5
-      md5: b917814d458ebee148815934c97c6b70
-      size: 108
+      md5: 019a1048035e5da90b5c1139f4a5b266
+      size: 107
     - path: src/evaluate.py
       hash: md5
-      md5: 0c735cc7b4a3f025e22f7b00a27f3d72
-      size: 3330
+      md5: b47b906fc360ffa708c5433627bd26dc
+      size: 3251
     outs:
     - path: metrics.json
       hash: md5
-      md5: 64eb3e68998d135b873045fad0d8d70e
-      size: 185
+      md5: 0a64507aeb2cac86e6eb0584e2888e17
+      size: 179

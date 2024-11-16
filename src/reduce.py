@@ -52,7 +52,8 @@ def reduce_dimensionality(df, method, params):
         model = umap.UMAP(n_components=params.get("n_components", 2),
                           n_neighbors=params.get("n_neighbors", 15),
                           min_dist=params.get("min_dist", 0.1),
-                          random_state=params.get("random_state", 42))
+                          random_state=params.get("random_state", 42),
+                          metric=params.get("metric", "euclidean"))
     else:
         raise ValueError(f"Unsupported method: {method}")
     

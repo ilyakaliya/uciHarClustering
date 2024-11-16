@@ -1,10 +1,11 @@
 method: UMAP  # Choose between "PCA", "tSNE", "UMAP"
-n_components: 2  # Number of dimensions to reduce to
+n_components: 10  # Number of dimensions to reduce to
 
 # Parameters for UMAP
-n_neighbors: 15
-min_dist: 0.1
+n_neighbors: 50
+min_dist: 0.01
 random_state: 42
+metric: "manhattan"
 
 # Parameters for t-SNE
 perplexity: 30

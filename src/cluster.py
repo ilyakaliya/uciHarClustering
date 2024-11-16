@@ -48,38 +48,71 @@ def apply_kmeans(df, params):
     print("Clustering completed.")
     return clusters, kmeans
 
-def visualize_clusters(df, clusters, output_path):
-    """Visualize clusters in a 2D scatter plot."""
+def visualize_clusters_with_labels(df, clusters, true_labels, output_path):
+    """
+    Visualize clusters in a 2D scatter plot and compare them with true labels.
+    :param df: DataFrame containing the reduced dataset.
+    :param clusters: Array of cluster labels predicted by KMeans.
+    :param true_labels: Array of true labels.
+    :param output_path: Path to save the visualization.
+    """
     try:
-        plt.figure(figsize=(10, 6))
+        # Create a figure with subplots
+        fig, axes = plt.subplots(1, 2, figsize=(18, 6))
+        
+        # Plot the true labels
         sns.scatterplot(
-            x=df.iloc[:, 0], 
-            y=df.iloc[:, 1], 
-            hue=clusters, 
-            palette="viridis", 
-            s=50, 
+            ax=axes[0],
+            x=df.iloc[:, 0],
+            y=df.iloc[:, 1],
+            hue=true_labels.squeeze(),
+            palette="tab10",
+            s=50,
             alpha=0.8
         )
-        plt.title("KMeans Clustering Results")
-        plt.xlabel("Component 1")
-        plt.ylabel("Component 2")
-        plt.legend(title="Cluster")
-        plt.tight_layout()
+        axes[0].set_title("True Labels")
+        axes[0].set_xlabel("Component 1")
+        axes[0].set_ylabel("Component 2")
+        axes[0].legend(title="Label", loc='upper right', bbox_to_anchor=(1.2, 1))
 
-        # Save the visualization
-        plot_path = output_path.replace(".csv", "_clusters.png")
+        # Plot the predicted clusters
+        sns.scatterplot(
+            ax=axes[1],
+            x=df.iloc[:, 0],
+            y=df.iloc[:, 1],
+            hue=clusters,
+            palette="viridis",
+            s=50,
+            alpha=0.8
+        )
+        axes[1].set_title("Predicted Clusters")
+        axes[1].set_xlabel("Component 1")
+        axes[1].set_ylabel("Component 2")
+        axes[1].legend(title="Cluster", loc='upper right', bbox_to_anchor=(1.2, 1))
+        
+        # Adjust layout and save the visualization
+        plt.tight_layout()
+        plot_path = output_path.replace(".csv", "_clusters_vs_labels.png")
         plt.savefig(plot_path)
-        print(f"Cluster visualization saved to {plot_path}")
+        print(f"Cluster vs. true labels visualization saved to {plot_path}")
     except Exception as e:
-        print(f"Error visualizing clusters: {e}")
+        print(f"Error visualizing clusters and labels: {e}")
         raise
 
-def main(input_path, output_path, params_path):
+def main(input_path, output_path, params_path, true_labels_path):
     # Load data
     df = load_data(input_path)
 
     # Load parameters
     params = load_params(params_path)
+
+    # Load true labels
+    try:
+        true_labels = pd.read_csv(true_labels_path, header=None).values
+        print(f"Loaded true labels with shape: {true_labels.shape}")
+    except Exception as e:
+        print(f"Error loading true labels: {e}")
+        raise
 
     # Apply KMeans clustering
     clusters, kmeans = apply_kmeans(df, params)
@@ -90,14 +123,16 @@ def main(input_path, output_path, params_path):
     # Save clustered data
     save_clustered_data(df, output_path)
 
-    # Visualize clusters
-    visualize_clusters(df.iloc[:, :-1], clusters, output_path)
+    # Visualize clusters and compare with true labels
+    visualize_clusters_with_labels(df.iloc[:, :-1], clusters, true_labels, output_path)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Apply KMeans clustering to a dataset")
     parser.add_argument('--input_path', type=str, required=True, help="Path to the reduced dataset CSV file")
     parser.add_argument('--output_path', type=str, required=True, help="Path to save the clustered dataset")
     parser.add_argument('--params_path', type=str, required=True, help="Path to the YAML file with clustering parameters")
+    parser.add_argument('--true_labels_path', type=str, required=True, help="Path to the true labels file")
     
     args = parser.parse_args()
-    main(args.input_path, args.output_path, args.params_path)
+    main(args.input_path, args.output_path, args.params_path, args.true_labels_path)
